@@ -1,0 +1,116 @@
+---
+title: Authentication
+description: Learn how to authenticate and access Selfmade Ninja Academy resources
+---
+
+## Authentication Overview
+
+Selfmade Ninja Academy uses secure authentication methods to protect user data and course access. We support multiple authentication flows to accommodate different use cases.
+
+<Tabs>
+  <Tab title="API Keys" icon="key">
+    <Steps>
+      <Step title="Generate Key" icon="plus">
+        Log into your dashboard and navigate to the API settings section.
+      </Step>
+      <Step title="Set Permissions" icon="settings">
+        Choose appropriate permissions for course access and enrollment.
+      </Step>
+      <Step title="Use in Requests" icon="send">
+        Include the API key in the Authorization header of your requests.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="OAuth" icon="user">
+    <Steps>
+      <Step title="Register Application" icon="file-text">
+        Create an OAuth application in your developer settings.
+      </Step>
+      <Step title="Implement Flow" icon="code">
+        Use standard OAuth 2.0 flows for user authentication.
+      </Step>
+      <Step title="Handle Tokens" icon="lock">
+        Securely store and refresh access tokens.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+<Expandable title="Security Best Practices" default-open="true">
+  Always use HTTPS for authentication requests. Never store API keys in client-side code. Rotate keys regularly and monitor usage patterns.
+</Expandable>
+
+<Callout kind="alert">
+  API keys provide programmatic access to your account. Keep them secure and never share them publicly.
+</Callout>
+
+<CodeGroup tabs="curl,Python">
+  ```bash
+# Authenticate with API key
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  https://api.selfmadeninja.com/courses
+  ```
+  ```python
+import requests
+
+headers = {
+    'Authorization': 'Bearer YOUR_API_KEY'
+}
+response = requests.get('https://api.selfmadeninja.com/courses', headers=headers)
+print(response.json())
+  ```
+</CodeGroup>
+
+<Columns cols={2}>
+  <Card title="User Sessions" icon="user" href="#sessions">
+    Learn about session management and token refresh.
+  </Card>
+  <Card title="Multi-Factor Auth" icon="shield" href="#mfa">
+    Enhance security with two-factor authentication.
+  </Card>
+</Columns>
+
+<ExpandableGroup>
+  <Expandable title="Token Expiration" default-open="false">
+    Access tokens expire after 1 hour. Use refresh tokens to obtain new access tokens without re-authentication.
+  </Expandable>
+  <Expandable title="Rate Limiting" default-open="false">
+    API requests are rate-limited to prevent abuse. Check response headers for rate limit information.
+  </Expandable>
+</ExpandableGroup>
+
+<Callout kind="info">
+  For enterprise integrations, contact our support team for custom authentication solutions.
+</Callout>
+
+## Authentication Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/auth/login` | POST | Authenticate user credentials |
+| `/auth/token` | POST | Exchange refresh token for access token |
+| `/auth/logout` | POST | Invalidate current session |
+
+<CodeGroup tabs="JavaScript,Java">
+  ```javascript
+// OAuth flow example
+const clientId = 'your_client_id';
+const redirectUri = 'https://yourapp.com/callback';
+
+const authUrl = `https://api.selfmadeninja.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
+
+// Redirect user to authUrl
+window.location.href = authUrl;
+  ```
+  ```java
+// Java authentication example
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+URL url = new URL("https://api.selfmadeninja.com/auth/login");
+HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+conn.setRequestMethod("POST");
+conn.setRequestProperty("Content-Type", "application/json");
+// Add request body with credentials
+  ```
+</CodeGroup>

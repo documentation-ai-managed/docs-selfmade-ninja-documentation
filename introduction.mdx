@@ -1,0 +1,76 @@
+---
+title: Introduction
+description: Overview of Selfmade Ninja Academy and its core capabilities
+---
+
+Selfmade Ninja Academy is an online education platform offering interactive programming courses and virtual laboratories. We focus on practical skills in cybersecurity, hacking, programming, IoT, electronics, software, hardware, AI, and full-stack web engineering. Our agile teaching methods equip learners with industry-relevant skills to succeed in the tech industry.
+
+<Columns cols={3}>
+  <Card title="Interactive Courses" icon="book-open" href="courses">
+    Access hands-on programming courses with virtual labs for real-world practice.
+  </Card>
+  <Card title="Cybersecurity Focus" icon="shield" href="courses#cybersecurity">
+    Learn ethical hacking and security fundamentals with industry-standard tools.
+  </Card>
+  <Card title="Full-Stack Engineering" icon="code" href="courses#fullstack">
+    Master web development from frontend to backend with modern technologies.
+  </Card>
+</Columns>
+
+<Tabs>
+  <Tab title="Getting Started" icon="rocket">
+    <Steps>
+      <Step title="Sign Up" icon="user">
+        Create your account on the Selfmade Ninja Academy platform to access courses.
+      </Step>
+      <Step title="Choose Course" icon="book-open">
+        Browse our catalog of courses in cybersecurity, programming, AI, and more.
+      </Step>
+      <Step title="Start Learning" icon="play">
+        Begin interactive lessons with virtual laboratories for hands-on practice.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Features" icon="zap">
+    <Expandable title="Virtual Labs" default-open="true">
+      Our virtual laboratories provide safe environments for practicing real-world scenarios in cybersecurity and programming.
+    </Expandable>
+    <Expandable title="Progress Tracking" default-open="false">
+      Monitor your learning progress with detailed analytics and completion certificates.
+    </Expandable>
+  </Tab>
+</Tabs>
+
+<Callout kind="info">
+  Join thousands of learners who have advanced their careers through our practical, industry-focused courses.
+</Callout>
+
+<CodeGroup tabs="Python,JavaScript">
+  ```python
+# Example: Basic cybersecurity script
+import socket
+
+def scan_ports(host, ports):
+    for port in ports:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        result = sock.connect_ex((host, port))
+        if result == 0:
+            print(f"Port {port} is open")
+        sock.close()
+
+scan_ports('localhost', [22, 80, 443])
+  ```
+  ```javascript
+// Example: Full-stack web app setup
+const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => {
+  res.send('Welcome to Selfmade Ninja Academy');
+});
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
+});
+  ```
+</CodeGroup>

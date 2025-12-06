@@ -1,0 +1,203 @@
+openapi: '3.0.0'
+info:
+  version: 1.0.0
+  title: Selfmade Ninja Academy API
+  license:
+    name: MIT
+servers:
+  - url: https://api.selfmadeninja.com/v1
+paths:
+  /courses:
+    get:
+      summary: List all courses
+      operationId: listCourses
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: An paged array of courses
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Courses'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a new course
+      operationId: createCourse
+      responses:
+        201:
+          description: Course created successfully
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /courses/{courseId}:
+    get:
+      summary: Info for a specific course
+      operationId: showCourseById
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          description: The id of the course to retrieve
+          schema:
+            type: string
+      responses:
+        200:
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Courses'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /enrollments:
+    get:
+      summary: List all user enrollments
+      operationId: listEnrollments
+      parameters:
+        - name: user_id
+          in: query
+          description: Filter enrollments by user ID
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: A paginated array of user enrollments with course details and progress information
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Enrollments'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Enroll a user in a course
+      operationId: createEnrollment
+      responses:
+        201:
+          description: User successfully enrolled in the specified course
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /progress/{userId}:
+    get:
+      summary: Get learning progress for a specific user
+      operationId: getUserProgress
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The id of the user to retrieve progress for
+          schema:
+            type: string
+      responses:
+        200:
+          description: Detailed progress information including completed modules, quiz scores, and time spent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Progress'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Course:
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        tag:
+          type: string
+    Courses:
+      type: array
+      items:
+        $ref: '#/components/schemas/Course'
+    Enrollment:
+      required:
+        - id
+        - user_id
+        - course_id
+      properties:
+        id:
+          type: integer
+          format: int64
+        user_id:
+          type: string
+        course_id:
+          type: string
+        enrolled_at:
+          type: string
+          format: date-time
+    Enrollments:
+      type: array
+      items:
+        $ref: '#/components/schemas/Enrollment'
+    Progress:
+      required:
+        - user_id
+        - completed_modules
+        - total_modules
+      properties:
+        user_id:
+          type: string
+        completed_modules:
+          type: integer
+        total_modules:
+          type: integer
+        average_score:
+          type: number
+          format: float
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

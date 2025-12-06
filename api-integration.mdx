@@ -1,0 +1,134 @@
+---
+title: API Integration
+description: Integrate Selfmade Ninja Academy APIs into your applications
+---
+
+## API Integration Guide
+
+Integrate Selfmade Ninja Academy's APIs to access course data, manage enrollments, and track learning progress programmatically.
+
+<Steps>
+  <Step title="Get API Access" icon="key">
+    Register for an API key in your account settings.
+  </Step>
+  <Step title="Review Documentation" icon="book-open">
+    Familiarize yourself with our API endpoints and data structures.
+  </Step>
+  <Step title="Test Integration" icon="code">
+    Use our sandbox environment to test your integration before going live.
+  </Step>
+  <Step title="Deploy" icon="rocket">
+    Launch your integrated application with production API access.
+  </Step>
+</Steps>
+
+<Tabs>
+  <Tab title="Courses API" icon="book-open">
+    <CodeGroup tabs="curl,Python">
+      ```bash
+# Get all courses
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  https://api.selfmadeninja.com/courses
+      ```
+      ```python
+import requests
+
+headers = {'Authorization': 'Bearer YOUR_API_KEY'}
+response = requests.get('https://api.selfmadeninja.com/courses', headers=headers)
+courses = response.json()
+for course in courses:
+    print(f"{course['title']}: {course['description']}")
+      ```
+    </CodeGroup>
+  </Tab>
+  <Tab title="Enrollments API" icon="user">
+    <CodeGroup tabs="curl,JavaScript">
+      ```bash
+# Enroll in a course
+curl -X POST \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"course_id": "123"}' \
+  https://api.selfmadeninja.com/enrollments
+      ```
+      ```javascript
+// Enroll user in course
+const enrollmentData = {
+  course_id: '123',
+  user_id: '456'
+};
+
+fetch('https://api.selfmadeninja.com/enrollments', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(enrollmentData)
+}).then(response => response.json())
+  .then(data => console.log('Enrollment successful:', data));
+      ```
+    </CodeGroup>
+  </Tab>
+</Tabs>
+
+<Expandable title="Webhook Integration" default-open="true">
+  Set up webhooks to receive real-time notifications about course completions, new enrollments, and progress updates.
+</Expandable>
+
+<Callout kind="tip">
+  Use our SDK libraries in Python, JavaScript, and Java for faster integration and automatic retry logic.
+</Callout>
+
+<Columns cols={3}>
+  <Card title="Python SDK" icon="code" href="#python-sdk">
+    Official Python library with full API coverage.
+  </Card>
+  <Card title="JavaScript SDK" icon="code" href="#js-sdk">
+    Node.js and browser-compatible SDK.
+  </Card>
+  <Card title="Java SDK" icon="code" href="#java-sdk">
+    Enterprise-grade Java integration library.
+  </Card>
+</Columns>
+
+<ExpandableGroup>
+  <Expandable title="Error Handling" default-open="false">
+    Implement proper error handling for API failures. Check HTTP status codes and response bodies for detailed error information.
+  </Expandable>
+  <Expandable title="Rate Limits" default-open="false">
+    Respect API rate limits to avoid throttling. Monitor the X-RateLimit headers in responses.
+  </Expandable>
+</ExpandableGroup>
+
+<Callout kind="info">
+  All API responses include comprehensive pagination information for large datasets.
+</Callout>
+
+## Integration Examples
+
+| Use Case | Endpoint | Method |
+|----------|----------|--------|
+| List courses | `/courses` | GET |
+| Get course details | `/courses/{id}` | GET |
+| Enroll user | `/enrollments` | POST |
+| Track progress | `/progress/{user_id}` | GET |
+
+<CodeGroup tabs="Python,Java">
+  ```python
+# Progress tracking example
+from selfmade_ninja import APIClient
+
+client = APIClient(api_key='YOUR_API_KEY')
+progress = client.get_user_progress(user_id='123')
+print(f"Completed {progress['completed_modules']}/{progress['total_modules']} modules")
+  ```
+  ```java
+// Java integration example
+import com.selfmadeninja.APIClient;
+
+APIClient client = new APIClient("YOUR_API_KEY");
+JSONObject progress = client.getUserProgress("123");
+System.out.println("Progress: " + progress.getInt("completed_modules") + "/" + progress.getInt("total_modules"));
+  ```
+</CodeGroup>
